@@ -35,28 +35,35 @@ public class MainActivity extends AppCompatActivity {
         ui_recycler_recette.setAdapter(adapter);
         my_this = this;
     }
-    public void add_new_cocktail(View view)
+    public void onAddButtonClock(View view)
     {
         adapter.add_recipe();
     }
 
     @Override
-    protected void onPause(Bundle savedInstanceState)
+    protected void onPause()
     {
-        super.onStop();
-
+        super.onPause();
     }
+
+    @Override
+    protected void onDestroy()
+    {
+
+        super.onDestroy();
+    }
+
     ///////// adapter /////////
     class recette_adapter extends RecyclerView.Adapter<recette_adapter.recette_holder> {
 //        ArrayList<String> recettes = new ArrayList<>();
         RealmList<recipe> recettes = new RealmList<>();
         RealmResults<recipe> recipe_list;
+//        static int auto_increment = 0;
         public recette_adapter()
         {
 
             Realm realm = Realm.getDefaultInstance();
-            recipe_list = realm.where(recipe.class).findAll();
-
+//            recipe_list = realm.where(recipe.class).equalTo("id",453);
 
 //            realm.beginTransaction();
 //            realm.copyToRealm(new recipe("djarabou au pouet", 432));
@@ -67,7 +74,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void add_recipe() {
-            recettes.add(new recipe("troupilette", "pouet", 10, 0, 2, new RealmList<ingredient>()));
+            int id = recettes.size();
+//            recettes.add(new recipe(id,"cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>()));
+//            recettes.add(new recipe(id,"cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>()));
+            recettes.add(new recipe("cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>()));
             notifyItemInserted(recettes.size() - 1);
         }
 
@@ -81,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             realm.beginTransaction();
             recp.deleteFromRealm();
             realm.commitTransaction();
-
         }
 
         @Override
@@ -126,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (view.getId() == R.id.editButton) {
 
                     Intent activintent = new Intent(my_this, RecipeEdit.class);
-                    activintent.putExtra("recipe_id", getAdapterPosition());
+//                    activintent.putExtra("recipe_id", getAdapterPosition());
+                    activintent.putExtra("recipe", recettes.get(getAdapterPosition()).getNom());
                     startActivity(activintent);
                 }
             }

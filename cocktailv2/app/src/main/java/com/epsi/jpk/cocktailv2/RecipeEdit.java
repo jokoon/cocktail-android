@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+//import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
 import io.realm.RealmList;
 
 public class RecipeEdit extends AppCompatActivity {
@@ -29,27 +30,48 @@ public class RecipeEdit extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_edit);
         ui_recycler_ingredients = findViewById(R.id.recycler_ingredients);
         ui_recycler_ingredients.setLayoutManager(new LinearLayoutManager(this));
-        int val = getIntent().getIntExtra("somekey", 432);
+//        int val = getIntent().getIntExtra("recipe_edit", -1);
+        String val = getIntent().getStringExtra("recipe");
+
         adapter = new ingredient_adapter();
         ui_recycler_ingredients.setAdapter(adapter);
         my_this = this;
 
+        Realm realm = Realm.getDefaultInstance();
+//        recipe rcp = realm.where(recipe.class).o
+        recipe rcp = realm.where(recipe.class).findFirst();
     }
     public void add_new_ingredient(View view)
     {
         adapter.add_ingredient();
     }
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+    }
+    @Override
+    protected void onDestroy()
+    {
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate();
+        realm.commitTransaction();
 
+        super.onDestroy();
+    }
     class ingredient_adapter extends RecyclerView.Adapter<ingredient_adapter.recette_holder> {
 //        ArrayList<String> ingredients = new ArrayList<>();
         RealmList<ingredient> ingredients = new RealmList<>();
 
         public void add_ingredient() {
-            ingredients.add(new ingredient("Rhum", 8, "cL"));
+//            ingredients.add(new ingredient("Rhum", 8, "cL"));
             notifyItemInserted(ingredients.size() - 1);
 
             // todo
             // check if the last line is empty when adding an ingredient
+//            if()
+
         }
 
         void removeRow(int index) {
@@ -104,11 +126,21 @@ public class RecipeEdit extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-//                ingredients.set(getAdapterPosition(),editable.toString());
-                ingredients.get(getAdapterPosition()).setNomIngredient(editable.toString());
-                // todo
-                // check if line is empty, and call removerow
-                //
+                String inputtext = editable.toString();
+                if(inputtext.equals(""))
+                {
+                    removeRow(getAdapterPosition());
+                }
+                else
+                {
+                    Realm realm = Realm.getDefaultInstance();
+                    ingredients.get(getAdapterPosition()).setNomIngredient(inputtext);
+                    realm.beginTransaction();
+                    realm.copyToRealmOrUpdate(ingredients);
+                    realm.commitTransaction();
+                }
+
+
             }
         }
     }

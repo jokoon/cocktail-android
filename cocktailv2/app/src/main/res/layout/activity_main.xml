@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ecran02a"
     tools:context="com.epsi.jpk.cocktailv2.MainActivity">
 
 
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:onClick="add_new_cocktail"
+        android:onClick="onAddButtonClock"
         android:text="Add new cocktail"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

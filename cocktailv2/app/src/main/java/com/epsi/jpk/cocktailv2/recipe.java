@@ -11,7 +11,7 @@ import io.realm.RealmObject;
 
 public class recipe extends RealmObject
 {
-
+    private int id;
     private String nom;
     private String description;
     private int duree_real;
@@ -23,7 +23,9 @@ public class recipe extends RealmObject
     public recipe(){}
 
 //    public recipe(String nom, String description, int duree_real, int duree_repos, int nb_personne, ArrayList<ingredient> _listeIngredients) {
+//public recipe(int id, String nom, String description, int duree_real, int duree_repos, int nb_personne, RealmList<ingredient> _listeIngredients) {
     public recipe(String nom, String description, int duree_real, int duree_repos, int nb_personne, RealmList<ingredient> _listeIngredients) {
+        this.id = id;
         this.nom = nom;
         this.description = description;
         this.duree_real = duree_real;
