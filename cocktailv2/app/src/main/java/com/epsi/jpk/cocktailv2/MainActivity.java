@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmList;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
@@ -22,14 +23,14 @@ public class MainActivity extends AppCompatActivity {
     recette_adapter  adapter;
 //    RealmList<Recipe>
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Realm.init(this);
         ui_recycler_recette = findViewById(R.id.recycler_recipes);
         ui_recycler_recette.setLayoutManager(new LinearLayoutManager(this));
-
-
         adapter = new recette_adapter();
         ui_recycler_recette.setAdapter(adapter);
         my_this = this;
@@ -39,13 +40,24 @@ public class MainActivity extends AppCompatActivity {
         adapter.add_recipe();
     }
 
+    @Override
+    protected void onPause(Bundle savedInstanceState)
+    {
+        super.onStop();
+
+    }
     ///////// adapter /////////
     class recette_adapter extends RecyclerView.Adapter<recette_adapter.recette_holder> {
-        ArrayList<String> recettes = new ArrayList<>();
+//        ArrayList<String> recettes = new ArrayList<>();
+        RealmList<recipe> recettes = new RealmList<>();
         RealmResults<recipe> recipe_list;
         public recette_adapter()
         {
-//            Realm realm = Realm.getDefaultInstance();
+
+            Realm realm = Realm.getDefaultInstance();
+            recipe_list = realm.where(recipe.class).findAll();
+
+
 //            realm.beginTransaction();
 //            realm.copyToRealm(new recipe("djarabou au pouet", 432));
 //            realm.copyToRealm(new recipe("tagada a la jean roger", 611));
@@ -55,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void add_recipe() {
-            recettes.add("");
+            recettes.add(new recipe("troupilette", "pouet", 10, 0, 2, new RealmList<ingredient>()));
             notifyItemInserted(recettes.size() - 1);
         }
 
@@ -84,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
             if (recettes.get(position).equals(""))
                 holder.ui_titlelabel.setText("<no name, please edit>");
             else
-                holder.ui_titlelabel.setText(recettes.get(position));
+                holder.ui_titlelabel.setText(recettes.get(position).getNom());
             holder.ui_categorylabel.setText("");
         }
 

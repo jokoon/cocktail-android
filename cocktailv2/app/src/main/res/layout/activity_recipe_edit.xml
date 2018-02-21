@@ -6,4 +6,38 @@
     android:layout_height="match_parent"
     tools:context="com.epsi.jpk.cocktailv2.RecipeEdit">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_ingredients"
+        android:layout_width="381dp"
+        android:layout_height="443dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/recette_name"
+        android:layout_width="216dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="type cocktail name"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/add_ingr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="add_new_ingredient"
+        android:text="add ingredient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:text="Ingredient list:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recette_name" />
 </android.support.constraint.ConstraintLayout>
