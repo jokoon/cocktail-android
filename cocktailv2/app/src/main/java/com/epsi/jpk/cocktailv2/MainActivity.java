@@ -47,9 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy()
-    {
-
+    protected void onDestroy()  {
         super.onDestroy();
     }
 
@@ -61,36 +59,51 @@ public class MainActivity extends AppCompatActivity {
 //        static int auto_increment = 0;
         public recette_adapter()
         {
-
             Realm realm = Realm.getDefaultInstance();
-//            recipe_list = realm.where(recipe.class).equalTo("id",453);
+            recipe_list = realm.where(recipe.class).findAll();
 
-//            realm.beginTransaction();
-//            realm.copyToRealm(new recipe("djarabou au pouet", 432));
-//            realm.copyToRealm(new recipe("tagada a la jean roger", 611));
-//            realm.copyToRealm(new recipe("patatadodo au soupir", 1));
-//            realm.copyToRealm(new recipe("youplababadoba a la troupilette", 99));
-//            realm.commitTransaction();
+            realm.beginTransaction();
+            if(recipe_list.size() == 0)
+            {
+//                realm.copyToRealm(new recipe("djarabou au pouet", "Miam", 432, 1, 1, ;
+//                realm.copyToRealm(new recipe("tagada a la jean roger", "Tres Miam",6111, 1,  1, new ingredient("curcuma", 2, 1)));
+//                realm.copyToRealm(new recipe("patatadodo au soupir", "Miam beaucoup",1, 1, 3, new ingredient("curcuma", 2, 1)));
+//                realm.copyToRealm(new recipe("youplababadoba a la troupilette", "Miam++ mmmmmh",991, 1, 2, new ingredient("curcuma", 2, 1)));
+                recipe rcp = new recipe();
+                rcp.setDescription("Miam++ mmmmmh");
+                rcp.setDuree_real(43);
+                rcp.setDuree_repos(123);
+                rcp.setNom("youplababadoba a la troupilette");
+                rcp.setNb_personne(2);
+
+                realm.copyToRealm(new recipe());
+
+            }
+            realm.commitTransaction();
         }
 
         public void add_recipe() {
-            int id = recettes.size();
+//            int id = recettes.size();
 //            recettes.add(new recipe(id,"cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>()));
 //            recettes.add(new recipe(id,"cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>()));
-            recettes.add(new recipe("cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>()));
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            recipe rcp = new recipe("cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>());
+//            recettes.add(rcp);
+            realm.copyToRealm(rcp);
+//            realm.copyToRealmOrUpdate(recettes);
+            realm.commitTransaction();
+
             notifyItemInserted(recettes.size() - 1);
         }
 
         void removeRow(int index) {
-            recettes.remove(index);
-            notifyItemRemoved(index);
-        }
-        void removewithrealm(recipe recp)
-        {
+//            recettes.remove(index);
             Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
-            recp.deleteFromRealm();
+            recipe_list.get(index).deleteFromRealm();
             realm.commitTransaction();
+            notifyItemRemoved(index);
         }
 
         @Override
@@ -102,16 +115,19 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(recette_holder holder, int position) {
-            if (recettes.get(position).equals(""))
-                holder.ui_titlelabel.setText("<no name, please edit>");
-            else
-                holder.ui_titlelabel.setText(recettes.get(position).getNom());
-            holder.ui_categorylabel.setText("");
+//            if (recettes.get(position).equals(""))
+//                holder.ui_titlelabel.setText("<no name, please edit>");
+//            else
+//                holder.ui_titlelabel.setText(recettes.get(position).getNom());
+//            holder.ui_categorylabel.setText("");
+            holder.ui_titlelabel.setText(recipe_list.get(position).getNom());
+            holder.ui_categorylabel.setText(recipe_list.get(position).getDescription());
+
         }
 
         @Override
         public int getItemCount() {
-            return recettes.size();
+            return recipe_list.size();
         }
 
         ///////// holder /////////
@@ -134,9 +150,9 @@ public class MainActivity extends AppCompatActivity {
                     removeRow(getAdapterPosition());
                 } else if (view.getId() == R.id.editButton) {
 
-                    Intent activintent = new Intent(my_this, RecipeEdit.class);
-//                    activintent.putExtra("recipe_id", getAdapterPosition());
-                    activintent.putExtra("recipe", recettes.get(getAdapterPosition()).getNom());
+                    Intent activintent = new Intent(MainActivity.this, RecipeEdit.class);
+                    activintent.putExtra("recipe_id", getAdapterPosition());
+//                    activintent.putExtra("recipe", recettes.get(getAdapterPosition()).getNom());
                     startActivity(activintent);
                 }
             }

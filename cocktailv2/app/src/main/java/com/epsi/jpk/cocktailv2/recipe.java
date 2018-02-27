@@ -83,5 +83,9 @@ public class recipe extends RealmObject
     public void set_listeIngredients(RealmList<ingredient> _listeIngredients) {
         this._listeIngredients = _listeIngredients;
     }
+    public void add_ingredient(ingredient ingr)
+    {
+
+    }
 
 }

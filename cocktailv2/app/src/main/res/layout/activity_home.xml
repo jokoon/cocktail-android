@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ecran01b"
+    android:onClick="onClick"
     tools:context="com.epsi.jpk.cocktailv2.home">
 
 </android.support.constraint.ConstraintLayout>
