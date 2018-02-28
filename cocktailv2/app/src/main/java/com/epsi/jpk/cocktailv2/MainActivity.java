@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         ui_recycler_recette.setAdapter(adapter);
         my_this = this;
     }
+
     public void onAddButtonClock(View view)
     {
         adapter.add_recipe();
@@ -44,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause()
     {
         super.onPause();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -83,22 +91,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void add_recipe() {
-//            int id = recettes.size();
-//            recettes.add(new recipe(id,"cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>()));
-//            recettes.add(new recipe(id,"cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>()));
             Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
             recipe rcp = new recipe("cocktail", "pouet", 10, 0, 2, new RealmList<ingredient>());
-//            recettes.add(rcp);
             realm.copyToRealm(rcp);
-//            realm.copyToRealmOrUpdate(recettes);
             realm.commitTransaction();
 
             notifyItemInserted(recettes.size() - 1);
         }
 
         void removeRow(int index) {
-//            recettes.remove(index);
             Realm realm = Realm.getDefaultInstance();
             realm.beginTransaction();
             recipe_list.get(index).deleteFromRealm();
