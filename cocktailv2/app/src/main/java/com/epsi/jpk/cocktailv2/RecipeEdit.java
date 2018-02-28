@@ -36,19 +36,14 @@ public class RecipeEdit extends AppCompatActivity implements TextWatcher{
         ui_recycler_ingredients = findViewById(R.id.recycler_ingredients);
         ui_recycler_ingredients.setLayoutManager(new LinearLayoutManager(this));
         int recipe_id = getIntent().getIntExtra("recipe_id", -1);
-        Log.i("fdsfds", "object id passed: "+recipe_id);
-
         // realm stuff
         Realm realm = Realm.getDefaultInstance();
         if(recipe_id != -1)
         {
             recipe_list = realm.where(recipe.class).findAll();
-            Log.d("dsadsa",Integer.toString(recipe_id));
             recipe_current = recipe_list.get(recipe_id);
             ui_recipe_name = findViewById(R.id.recipe_name);
             ui_recipe_name.setText(recipe_current.getNom());
-            Log.i("fdsfds", "found object "+recipe_id);
-
         }
         adapter = new ingredient_adapter();
         ui_recycler_ingredients.setAdapter(adapter);
@@ -105,12 +100,7 @@ public class RecipeEdit extends AppCompatActivity implements TextWatcher{
         }
     }
 
-
-
-
-
     class ingredient_adapter extends RecyclerView.Adapter<ingredient_adapter.ingredient_holder> {
-//        ArrayList<String> ingredients = new ArrayList<>();
         RealmList<ingredient> ingredients = new RealmList<>();
         public ingredient_adapter()
         {
@@ -118,23 +108,14 @@ public class RecipeEdit extends AppCompatActivity implements TextWatcher{
         }
         public void add_ingredient() {
 
-//            ingredients.add(new ingredient("Rhum", 8, "cL"));
-
             // todo
             // check if the last line is empty when adding an ingredient
-//            if(recipe_current.get_listeIngredients().size() > 0 &&
-//                    recipe_current.get_listeIngredients().last().getNomIngredient().equals(""))
-//            {
-//
-//            }
-//            else
-//            {
             Realm r = recipe_current.getRealm();
             r.beginTransaction();
-                ingredients.add(new ingredient());
-                r.commitTransaction();
-                notifyItemInserted(ingredients.size() - 1);
-//            }
+            ingredients.add(new ingredient());
+            r.commitTransaction();
+
+            notifyItemInserted(ingredients.size() - 1);
         }
 
         void removeRow(int index) {
